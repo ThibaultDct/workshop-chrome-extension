@@ -1,0 +1,65 @@
+body {
+    width: 450px;
+    height: 450px;
+    background-color: #264653;
+    border-radius: 10px;
+}
+
+button {
+    background-color: #2a9d8f;
+    color: white;
+    height: 30px;
+    width: auto;
+    outline: none;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #f4a261;
+    color: black;
+}
+
+button.current {
+    box-shadow: 0 0 0 2px white, 0 0 0 4px black;
+}
+
+#title {
+    color: white;
+    text-align: center;
+}
+
+#urlInfos {
+    background-color: #264653;
+    color: white;
+    border-radius: 2px;
+    margin: 2px;
+    padding: 10px;
+}
+
+#urlValue {
+    background-color: #f4a261;
+    color: black;
+    border-radius: 2px;
+    margin: 2px;
+    padding: 10px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
+
+#sitesNumber {
+    color: white;
+}
+
+#sitesNumberValue {
+    color: white;
+    font-weight: bold;
+}
+
+#signature {
+    position: abosulute;
+    bottom: 0;
+    text-align: right;
+    color: white;
+}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h1 id="title">Workshop URL Blocker</h1>
+    <div id="urlInfos">
+        <p>Page actuelle : </p>
+        <div id="urlValue">
+            <span id="currentURL"></span>
+        </div>
+        <br/><button id="addToBadSites">Estimer la page comme malveillante</button>
+    </div>
+    <button id="searchLinks">Afficher les liens</button>
+    <p id="bannedSites"></p>
+    <p id="postResult"></p>
+    <p id="sitesNumber">Nombre de sites malveillants enregistrés : </p>
+    <span id="sitesNumberValue"></span>
+    <span id="signature">Made with &#x2764; for Workshop.</span>
+
+    <script src="popup.js"></script>
+    <script src="highlightLinks.js"></script>
+</body>
+
+</html>
