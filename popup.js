@@ -4,8 +4,6 @@ let searchLinks = document.getElementById("searchLinks");
 let postResult = document.getElementById("postResult");
 let sitesNumberValue = document.getElementById("sitesNumberValue");
 
-var areLinksHighlighted = false;
-
 chrome.storage.sync.get("url", ({ url }) => {
     currentURL.innerText = url;
 });
@@ -52,33 +50,41 @@ function getSitesNumber() {
     fetch(url, options)
         .then(response => {
             console.log(response.status);
-            let total = response.body.size[0].n_reputations;
+            let result = response.json();
+            let total = result.size[0].n_reputations;
             chrome.storage.sync.set({ totalSites: total });
-            sitesNumberValue.innerText = response.body.success;
+            sitesNumberValue.innerText = total;
         })
         .catch(error => console.log(error));
 }
 
 function highlightLinks() {
     var urls = document.getElementsByTagName('a');
-    if (areLinksHighlighted === true) {
-        for (var i = 0; i < urls.length; i++) {
-            console.log(urls[i].getAttribute('href'));
-            urls[i].style.backgroundColor = "#CDCDCD";
+
+    chrome.storage.sync.get("highlightLinksBool", ({ highlightLinksBool }) => {
+        if (highlightLinksBool === true) {
+            for (var i = 0; i < urls.length; i++) {
+                console.log(urls[i].getAttribute('href'));
+                urls[i].style.backgroundColor = "transparent";
+            }
+            chrome.storage.sync.set({ highlightLinksBool: false });
+            searchLinks.style.backgroundColor = "#CDCDCD";
+        } else {
+            for (var i = 0; i < urls.length; i++) {
+                console.log(urls[i].getAttribute('href'));
+                urls[i].style.backgroundColor = "#f4a261";
+            }
+            chrome.storage.sync.set({ highlightLinksBool: true });
+            searchLinks.style.backgroundColor = "#2a9d8f";
         }
-        areLinksHighlighted = false;
-    } else {
-        for (var i = 0; i < urls.length; i++) {
-            console.log(urls[i].getAttribute('href'));
-            urls[i].style.backgroundColor = "#f4a261";
-        }
-        areLinksHighlighted = true;
-    }
+    });
 }
 
-// ===== LISTENER
+// ===== LISTENERS =====
+// Bouton ajout site malveillant
 addToBadSites.addEventListener("click", e => addSiteToBannedList(e));
 
+// Bouton afficher / masquer liens
 searchLinks.addEventListener("click", async() => {
     let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
@@ -88,11 +94,13 @@ searchLinks.addEventListener("click", async() => {
     });
 });
 
-if (areLinksHighlighted === true) {
-    searchLinks.style.backgroundColor = "#2a9d8f";
-} else {
-    searchLinks.style.backgroundColor = "#CDCDCD";
-}
+chrome.storage.sync.get("highlightLinksBool", ({ highlightLinksBool }) => {
+    if (highlightLinksBool === true) {
+        searchLinks.style.backgroundColor = "#2a9d8f";
+    } else {
+        searchLinks.style.backgroundColor = "#CDCDCD";
+    }
+});
 
 chrome.storage.sync.get("url", ({ url }) => {
     currentURL.innerText = url;
