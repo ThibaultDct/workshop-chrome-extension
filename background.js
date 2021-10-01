@@ -66,7 +66,7 @@ chrome.runtime.onInstalled.addListener((reason) => {
                     if (json.reputation.length > 0) {
                         chrome.storage.sync.set({ pageInfos: json.reputation });
                         chrome.tabs.query({ currentWindow: true, active: true }, function(tab) {
-                            chrome.tabs.update(tab.id, { url: "http://google.fr" });
+                            chrome.tabs.update(tab.id, { url: "https://workshop.cloud2.thibaultdct.fr/#/dashboard" });
                         });
                     } else
                         chrome.storage.sync.set({ pageInfos: null });

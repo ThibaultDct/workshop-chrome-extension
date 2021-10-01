@@ -64,7 +64,7 @@ function highlightLinks() {
 
 const goToWebsite = async e => {
     chrome.tabs.query({ currentWindow: true, active: true }, function(tab) {
-        chrome.tabs.update(tab.id, { url: "http://google.fr" });
+        chrome.tabs.update(tab.id, { url: "https://workshop.cloud2.thibaultdct.fr/#/dashboard" });
     });
 }
 
@@ -107,7 +107,7 @@ chrome.storage.sync.get("pageInfos", ({ pageInfos }) => {
     } else {
         alertPlaceholder.style.visibility = "visible";
         chrome.tabs.query({ currentWindow: true, active: true }, function(tab) {
-            chrome.tabs.update(tab.id, { url: "http://google.fr" });
+            chrome.tabs.update(tab.id, { url: "https://workshop.cloud2.thibaultdct.fr/#/dashboard" });
         });
     }
 });
