@@ -10,7 +10,12 @@
     "permissions": [
         "storage",
         "activeTab",
-        "scripting"
+        "scripting",
+        "alarms",
+        "notifications",
+        "webNavigation",
+        "webRequest",
+        "tabs"
     ],
     "host_permissions": [
         "*://*.cloud.thibaultdct.fr/*"

@@ -3,6 +3,8 @@ let addToBadSites = document.getElementById("addToBadSites");
 let searchLinks = document.getElementById("searchLinks");
 let postResult = document.getElementById("postResult");
 let sitesNumberValue = document.getElementById("sitesNumberValue");
+let alertPlaceholder = document.getElementById("alert");
+let buttonToWebsite = document.getElementById("goToWebsite");
 
 chrome.storage.sync.get("url", ({ url }) => {
     currentURL.innerText = url;
@@ -38,26 +40,6 @@ const addSiteToBannedList = async e => {
     });
 }
 
-function getSitesNumber() {
-    const url = 'https://workshop.cloud.thibaultdct.fr/reputations/all/size';
-    const options = {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json;charset=UTF-8'
-        }
-    };
-    fetch(url, options)
-        .then(response => {
-            console.log(response.status);
-            let result = response.json();
-            let total = result.size[0].n_reputations;
-            chrome.storage.sync.set({ totalSites: total });
-            sitesNumberValue.innerText = total;
-        })
-        .catch(error => console.log(error));
-}
-
 function highlightLinks() {
     var urls = document.getElementsByTagName('a');
 
@@ -65,7 +47,7 @@ function highlightLinks() {
         if (highlightLinksBool === true) {
             for (var i = 0; i < urls.length; i++) {
                 console.log(urls[i].getAttribute('href'));
-                urls[i].style.backgroundColor = "transparent";
+                urls[i].style.backgroundColor = "unset";
             }
             chrome.storage.sync.set({ highlightLinksBool: false });
             searchLinks.style.backgroundColor = "#CDCDCD";
@@ -77,6 +59,12 @@ function highlightLinks() {
             chrome.storage.sync.set({ highlightLinksBool: true });
             searchLinks.style.backgroundColor = "#2a9d8f";
         }
+    });
+}
+
+const goToWebsite = async e => {
+    chrome.tabs.query({ currentWindow: true, active: true }, function(tab) {
+        chrome.tabs.update(tab.id, { url: "http://google.fr" });
     });
 }
 
@@ -94,6 +82,9 @@ searchLinks.addEventListener("click", async() => {
     });
 });
 
+// Bouton site
+buttonToWebsite.addEventListener("click", e => goToWebsite(e));
+
 chrome.storage.sync.get("highlightLinksBool", ({ highlightLinksBool }) => {
     if (highlightLinksBool === true) {
         searchLinks.style.backgroundColor = "#2a9d8f";
@@ -106,9 +97,19 @@ chrome.storage.sync.get("url", ({ url }) => {
     currentURL.innerText = url;
 });
 
-getSitesNumber();
 chrome.storage.sync.get("totalSites", ({ totalSites }) => {
     sitesNumberValue.innerText = totalSites;
+});
+
+chrome.storage.sync.get("pageInfos", ({ pageInfos }) => {
+    if (pageInfos === null) {
+        alertPlaceholder.style.visibility = "hidden";
+    } else {
+        alertPlaceholder.style.visibility = "visible";
+        chrome.tabs.query({ currentWindow: true, active: true }, function(tab) {
+            chrome.tabs.update(tab.id, { url: "http://google.fr" });
+        });
+    }
 });
 
 chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
